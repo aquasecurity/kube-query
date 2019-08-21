@@ -5,17 +5,20 @@ kube-query is an extension for osquery. letting you visualize your cluster using
 Deployment
 ===
 ### Prerequisites
-* python3   
-* pip
+#### Go v1.12+
 
-install the required dependencies by:
+### build
+```bash
+$ export GO111MODULE=on 
+$ go build kube-query.go 
+```
 
-`python -m pip install -r requirements.txt`
+## Running kube-query
+**When running the kube-query, you should always pass the `-kubeconfig` flag, specifying the path to your kubeconfig file.**
 
-
-## osqueryi
-when using the [osqueryi tool](https://osquery.readthedocs.io/en/stable/introduction/using-osqueryi/) you can easily register kube-query by passing the --socket parameter to kube-query on another process. for example:  
-`python kube-query.py --socket="/path/to/osquery/socket"` 
+## osqueryi 
+when using the [osqueryi tool](https://osquery.readthedocs.io/en/stable/introduction/using-osqueryi/) you can easily register kube-query by passing the -socket parameter to kube-query on another process. for example:  
+`./kube-query -socket="/path/to/osquery/socket" -kubequery="/path/to/kubeconfig.yml"` 
 
 But there are many other options to automatically [register extensions](https://osquery.readthedocs.io/en/stable/deployment/extensions/).
 
