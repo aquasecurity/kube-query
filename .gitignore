@@ -1,2 +1,5 @@
+go.sum
+kube-query
 conf*
-*__pycache__*
+.vscode
+.gitignore
