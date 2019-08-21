@@ -23,10 +23,7 @@ func CreateKubeClient(kubeconfig string) (kubernetes.Interface, error) {
 
 // CreateOsQueryExtension Generates and registers an osquery extension
 // using given osquery socket path
-func CreateOsQueryExtension(name, socket string) (*osquery.ExtensionManagerServer, error) {
-	server, err := osquery.NewExtensionManagerServer(name, socket)
-	if err != nil {
-		return nil, err
-	}
-	return server, nil
+func CreateOsQueryExtension(name, socket string) (server *osquery.ExtensionManagerServer, err error) {
+	server, err = osquery.NewExtensionManagerServer(name, socket)
+	return
 }
