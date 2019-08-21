@@ -20,6 +20,7 @@ $ go build kube-query.go
 when using the [osqueryi tool](https://osquery.readthedocs.io/en/stable/introduction/using-osqueryi/) you can easily register kube-query by passing the -socket parameter to kube-query on another process. for example:  
 `./kube-query -socket="/path/to/osquery/socket" -kubequery="/path/to/kubeconfig.yml"` 
 
+
 But there are many other options to automatically [register extensions](https://osquery.readthedocs.io/en/stable/deployment/extensions/).
 
 ###
