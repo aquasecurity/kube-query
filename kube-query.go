@@ -33,9 +33,10 @@ func main() {
 	}
 
 	// creating tables and appending to list
-	tableList := make([]tables.Table, 2)
+	tableList := make([]tables.Table, 3)
 	tableList[0] = tables.NewPodsTable(kubeclient)
 	tableList[1] = tables.NewContainersTable(kubeclient)
+	tableList[2] = tables.NewVolumesTable(kubeclient)
 
 	// Registering all tables
 	for _, t := range tableList {
