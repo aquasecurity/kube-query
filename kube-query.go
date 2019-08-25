@@ -49,6 +49,7 @@ func main() {
 		tables.NewPodsTable(kubeclient),
 		tables.NewContainersTable(kubeclient),
 		tables.NewVolumesTable(kubeclient),
+		tables.NewNodesTable(kubeclient),
 	}
 
 	// Registering all tables
