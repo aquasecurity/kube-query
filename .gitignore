@@ -3,3 +3,4 @@ kube-query
 conf*
 .vscode
 .gitignore
+*.exe

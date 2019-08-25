@@ -34,9 +34,9 @@ func main() {
 
 	// creating tables and appending to list
 	tableList := []tables.Table{
-		tables.NewPodsTable(kubeclient)
-		tables.NewContainersTable(kubeclient)
-		tables.NewVolumesTable(kubeclient)
+		tables.NewPodsTable(kubeclient),
+		tables.NewContainersTable(kubeclient),
+		tables.NewVolumesTable(kubeclient),
 	}
 
 	// Registering all tables
