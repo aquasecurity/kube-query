@@ -12,11 +12,23 @@ import (
 
 func main() {
 	// Parsing flags
-	kubeconfig := flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
+	kubeconfig := flag.String("kubeconfig", "", "absolute path to the kubeconfig file (can be set by KUBECONFIG environment variable)")
 	socketPath := flag.String("socket", "", "absolute path to the osquery socket")
+	
+	// currently we do not care for these flags, but they must be set for the auto loader of osquery
+	flag.String("timeout", "", "flag for specifying wait time before registering on autoload") 
+	flag.String("interval", "", "flag for specifying wait time before registering on autoload")
+	
 	flag.Parse()
-	if *kubeconfig == "" || *socketPath == "" {
-		flag.PrintDefaults()
+	if len(*kubeconfig) == 0 {
+		// if not specified from flag, try getting from env variable
+		if *kubeconfig = os.Getenv("KUBECONFIG"); len(*kubeconfig) == 0 {
+			log.Fatal("Kubeconfig was not specified. set KUBECONFIG environment variable or pass the --kubeconfig flag")
+			os.Exit(1)
+		}
+	}
+	if len(*socketPath) == 0 {
+		log.Fatal("Socket was not specified, set the --socket flag")		
 		os.Exit(1)
 	}
 
