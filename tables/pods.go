@@ -21,6 +21,7 @@ type PodsTable struct {
 // saves given initialized kubernetes client
 func NewPodsTable(kubeclient kubernetes.Interface) *PodsTable {
 	columns := []table.ColumnDefinition{
+		table.TextColumn("uid"),
 		table.TextColumn("name"),
 		table.TextColumn("namespace"),
 		table.TextColumn("ip"),
@@ -54,6 +55,7 @@ func (t *PodsTable) Generate(ctx context.Context, queryContext table.QueryContex
 	rows := make([]map[string]string, len(pods.Items))
 	for i, pod := range pods.Items {
 		rows[i] = map[string]string{
+			"uid":			   string(pod.UID), // UID is an alias to string
 			"name":            pod.Name,
 			"namespace":       pod.Namespace,
 			"ip":              pod.Status.PodIP,

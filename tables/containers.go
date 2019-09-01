@@ -23,7 +23,7 @@ type ContainersTable struct {
 func NewContainersTable(kubeclient kubernetes.Interface) *ContainersTable {
 	columns := []table.ColumnDefinition{
 		table.TextColumn("name"),
-		table.TextColumn("pod_name"),
+		table.TextColumn("pod_uid"),
 		table.TextColumn("image"),
 		table.TextColumn("privileged"), // TODO: should we make this an IntegerColumn?
 	}
@@ -59,7 +59,7 @@ func (t *ContainersTable) Generate(ctx context.Context, queryContext table.Query
 		for _, container := range pod.Spec.Containers {
 			currRow := map[string]string{
 				"name":       container.Name,
-				"pod_name":   pod.Name,
+				"pod_uid":    string(pod.UID),
 				"image":      container.Image,
 				"privileged": "False",
 			}
