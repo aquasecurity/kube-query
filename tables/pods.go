@@ -25,9 +25,9 @@ func NewPodsTable(kubeclient kubernetes.Interface) *PodsTable {
 		table.TextColumn("name"),
 		table.TextColumn("namespace"),
 		table.TextColumn("ip"),
-		table.TextColumn("phase"),
 		table.TextColumn("service_account"),
 		table.TextColumn("node_name"),
+		table.TextColumn("phase"),
 	}
 	return &PodsTable{
 		name:    "kubernetes_pods",
