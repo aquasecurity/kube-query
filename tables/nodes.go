@@ -8,20 +8,22 @@ import (
 	"github.com/kolide/osquery-go/plugin/table"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	corev1 "k8s.io/api/core/v1"
+	metrics "k8s.io/metrics/pkg/client/clientset/versioned"
 	"k8s.io/client-go/kubernetes"
 )
 
 // NodesTable implements the Table interface,
 // Uses kubeclient to extract information about pods
 type NodesTable struct {
-	columns []table.ColumnDefinition
-	name    string
-	client  kubernetes.Interface
+	columns        []table.ColumnDefinition
+	name           string
+	client  	   kubernetes.Interface
+	metricsClient  *metrics.Clientset
 }
 
 // NewNodesTable creates a new NodesTable
 // saves given initialized kubernetes client
-func NewNodesTable(kubeclient kubernetes.Interface) *NodesTable {
+func NewNodesTable(kubeclient kubernetes.Interface, mc *metrics.Clientset) *NodesTable {
 	columns := []table.ColumnDefinition{
 		table.TextColumn("name"),
 		table.TextColumn("role"),
@@ -35,6 +37,7 @@ func NewNodesTable(kubeclient kubernetes.Interface) *NodesTable {
 		name:    "kubernetes_nodes",
 		columns: columns,
 		client:  kubeclient,
+		metricsClient: mc,
 	}
 }
 
@@ -62,6 +65,12 @@ func (t *NodesTable) Generate(ctx context.Context, queryContext table.QueryConte
 			"name":	node.Status.NodeInfo.BootID,
 			"kernel_version": node.Status.NodeInfo.KernelVersion,
 			"kubelet_version": node.Status.NodeInfo.KubeletVersion,			
+			"role": "slave", // default to slave, unless decided master 
+		}
+
+		// checking if it's a master node
+		if _, hasMasterRoleLabel := node.ObjectMeta.Labels["node-role.kubernetes.io/master"]; hasMasterRoleLabel {
+			currRow["role"] = "master"
 		}
 
 		// setting addresses
@@ -72,7 +81,22 @@ func (t *NodesTable) Generate(ctx context.Context, queryContext table.QueryConte
 				currRow["external_ip"] = address.Address 
 			}
 		}
- 
+
+		// if nodename exists, we extract metrics using the name
+		if nodename := currRow["name"]; nodename != "" {
+			metrics, err := t.metricsClient.MetricsV1beta1().NodeMetricses().Get(nodename, metav1.GetOptions{})
+			if err == nil {
+				// metrics.Usage is of type *resource.Quantity. from:
+				// https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go
+				if cpu, ok := metrics.Usage[corev1.ResourceCPU]; ok {
+					currRow["cpu_usage"] = cpu.String()
+				}
+				if memory, ok := metrics.Usage[corev1.ResourceMemory]; ok {
+					currRow["memory_usage"] = memory.String()
+				}
+			}
+		}
+
 		rows[i] = currRow
 	}
 	return rows, nil

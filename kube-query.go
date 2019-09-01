@@ -32,10 +32,15 @@ func main() {
 		os.Exit(1)
 	}
 
-	// initializing client and extension
+	// initializing clients and extension
 	kubeclient, err := utils.CreateKubeClient(*kubeconfig)
 	if err != nil {
 		log.Fatalf("Error on creating kube-client: %s", err)
+		panic(err)
+	}
+	metricsclient, err := utils.CreateMetricsClient(*kubeconfig)
+	if err != nil {
+		log.Fatalf("Error on creating the metrics client: %s", err)
 		panic(err)
 	}
 	extension, err := utils.CreateOsQueryExtension("kube-query", *socketPath)
@@ -49,7 +54,7 @@ func main() {
 		tables.NewPodsTable(kubeclient),
 		tables.NewContainersTable(kubeclient),
 		tables.NewVolumesTable(kubeclient),
-		tables.NewNodesTable(kubeclient),
+		tables.NewNodesTable(kubeclient, metricsclient), // specific columns use the metrics client
 	}
 
 	// Registering all tables
