@@ -25,6 +25,7 @@ func NewPodsTable(kubeclient kubernetes.Interface) *PodsTable {
 		table.TextColumn("name"),
 		table.TextColumn("namespace"),
 		table.TextColumn("ip"),
+		table.TextColumn("phase"),
 		table.TextColumn("service_account"),
 		table.TextColumn("node_name"),
 	}
@@ -59,6 +60,7 @@ func (t *PodsTable) Generate(ctx context.Context, queryContext table.QueryContex
 			"name":            pod.Name,
 			"namespace":       pod.Namespace,
 			"ip":              pod.Status.PodIP,
+			"phase":           string(pod.Status.Phase),
 			"service_account": pod.Spec.ServiceAccountName,
 			"node_name":       pod.Spec.NodeName,
 		}
