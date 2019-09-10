@@ -55,6 +55,7 @@ func main() {
 		tables.NewContainersTable(kubeclient),
 		tables.NewVolumesTable(kubeclient),
 		tables.NewNodesTable(kubeclient, metricsclient), // specific columns use the metrics client
+		tables.NewDeploymentsTable(kubeclient),
 	}
 
 	// Registering all tables
