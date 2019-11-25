@@ -5,8 +5,8 @@ import (
 	"log"
 	"os"
 
-	tables "github.com/aquasecurity/kube-query/tables"
-	utils "github.com/aquasecurity/kube-query/utils"
+	 "github.com/aquasecurity/kube-query/tables"
+	 "github.com/aquasecurity/kube-query/utils"
 	osqueryTable "github.com/kolide/osquery-go/plugin/table"
 )
 
