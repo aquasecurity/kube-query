@@ -3,7 +3,6 @@ module github.com/aquasecurity/kube-query
 go 1.12
 
 require (
-	github.com/Azure/go-autorest v11.1.2+incompatible // indirect
 	github.com/googleapis/gnostic v0.3.1 // indirect
 	github.com/imdario/mergo v0.3.7 // indirect
 	github.com/kolide/osquery-go v0.0.0-20190113061206-be0a8de4cf1d
@@ -13,7 +12,6 @@ require (
 	k8s.io/api v0.0.0-20190831074750-7364b6bdad65
 	k8s.io/apimachinery v0.0.0-20190831074630-461753078381
 	k8s.io/client-go v0.0.0-20190831074946-3fe2abece89e
-	k8s.io/klog v0.4.0
 	k8s.io/metrics v0.0.0-20190831080339-bd7772846802
 	k8s.io/utils v0.0.0-20190809000727-6c36bc71fc4a // indirect
 )
