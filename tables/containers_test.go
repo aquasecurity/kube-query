@@ -12,14 +12,20 @@ import (
 func TestNewContainersTable(t *testing.T) {
 	tc := testclient.NewSimpleClientset()
 	ct := NewContainersTable(tc)
+
+	expectedColumns := []table.ColumnDefinition{
+		table.TextColumn("name"),
+		table.TextColumn("pod_uid"),
+		table.TextColumn("image"),
+		table.TextColumn("privileged"),
+	}
+
 	assert.Equal(t, &ContainersTable{
-		columns: []table.ColumnDefinition{
-			table.TextColumn("name"),
-			table.TextColumn("pod_uid"),
-			table.TextColumn("image"),
-			table.TextColumn("privileged"),
-		},
-		name:   "kubernetes_containers",
-		client: tc,
+		columns: expectedColumns,
+		name:    "kubernetes_containers",
+		client:  tc,
 	}, ct)
+
+	assert.Equal(t, "kubernetes_containers", ct.Name())
+	assert.Equal(t, expectedColumns, ct.Columns())
 }
