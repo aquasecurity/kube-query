@@ -48,7 +48,7 @@ func (t *ContainersTable) Columns() []table.ColumnDefinition {
 func (t *ContainersTable) Generate(ctx context.Context, queryContext table.QueryContext) ([]map[string]string, error) {
 	pods, err := t.client.CoreV1().Pods("").List(metav1.ListOptions{})
 	if err != nil {
-		log.Fatalf("Could not get pods from Api")
+		log.Println("could not get pods from k8s api")
 		return nil, err
 	}
 
