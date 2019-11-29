@@ -48,6 +48,6 @@ SELECT * FROM kubernetes_containers;
 SELECT * 
  FROM kubernetes_containers 
  JOIN kubernetes_pods 
- ON kubernetes_containers.name=kubernetes_pods.name 
+ ON kubernetes_containers.pod_uid=kubernetes_pods.uid
  WHERE privileged="True";
 ```
