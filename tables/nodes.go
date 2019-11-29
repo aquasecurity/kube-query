@@ -6,24 +6,24 @@ import (
 
 	// "github.com/aquasecurity/kube-query/utils"
 	"github.com/kolide/osquery-go/plugin/table"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	corev1 "k8s.io/api/core/v1"
-	metrics "k8s.io/metrics/pkg/client/clientset/versioned"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	metrics "k8s.io/metrics/pkg/client/clientset/versioned"
 )
 
 // NodesTable implements the Table interface,
 // Uses kubeclient to extract information about pods
 type NodesTable struct {
-	columns        []table.ColumnDefinition
-	name           string
-	client  	   kubernetes.Interface
-	metricsClient  *metrics.Clientset
+	columns       []table.ColumnDefinition
+	name          string
+	client        kubernetes.Interface
+	metricsClient metrics.Interface
 }
 
 // NewNodesTable creates a new NodesTable
 // saves given initialized kubernetes client
-func NewNodesTable(kubeclient kubernetes.Interface, mc *metrics.Clientset) *NodesTable {
+func NewNodesTable(kubeclient kubernetes.Interface, mc metrics.Interface) *NodesTable {
 	columns := []table.ColumnDefinition{
 		table.TextColumn("name"),
 		table.TextColumn("role"),
@@ -34,9 +34,9 @@ func NewNodesTable(kubeclient kubernetes.Interface, mc *metrics.Clientset) *Node
 		table.TextColumn("memory_usage"),
 	}
 	return &NodesTable{
-		name:    "kubernetes_nodes",
-		columns: columns,
-		client:  kubeclient,
+		name:          "kubernetes_nodes",
+		columns:       columns,
+		client:        kubeclient,
 		metricsClient: mc,
 	}
 }
@@ -62,10 +62,10 @@ func (t *NodesTable) Generate(ctx context.Context, queryContext table.QueryConte
 	rows := make([]map[string]string, len(nodes.Items))
 	for i, node := range nodes.Items {
 		currRow := map[string]string{
-			"name":	node.Status.NodeInfo.BootID,
-			"kernel_version": node.Status.NodeInfo.KernelVersion,
-			"kubelet_version": node.Status.NodeInfo.KubeletVersion,			
-			"role": "slave", // default to slave, unless decided master 
+			"name":            node.Status.NodeInfo.BootID,
+			"kernel_version":  node.Status.NodeInfo.KernelVersion,
+			"kubelet_version": node.Status.NodeInfo.KubeletVersion,
+			"role":            "slave", // default to slave, unless decided master
 		}
 
 		// checking if it's a master node
@@ -76,9 +76,9 @@ func (t *NodesTable) Generate(ctx context.Context, queryContext table.QueryConte
 		// setting addresses
 		for _, address := range node.Status.Addresses {
 			if address.Type == corev1.NodeHostName {
-				currRow["name"] = address.Address 
+				currRow["name"] = address.Address
 			} else if address.Type == corev1.NodeExternalIP {
-				currRow["external_ip"] = address.Address 
+				currRow["external_ip"] = address.Address
 			}
 		}
 
