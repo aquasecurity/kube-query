@@ -18,8 +18,18 @@ $ go build kube-query.go
 
 ## osqueryi 
 when using the [osqueryi tool](https://osquery.readthedocs.io/en/stable/introduction/using-osqueryi/) you can easily register kube-query by passing the -socket parameter to kube-query on another process. for example:  
-`./kube-query -socket="/path/to/osquery/socket" -kubequery="/path/to/kubeconfig.yml"` 
+`./kube-query -socket="/path/to/osquery/socket" -kubeconfig="/path/to/kubeconfig.yml"` 
 
+In order to get the path to the osquery socket you could do something like:
+```
+osqueryi --nodisable_extensions
+osquery> select value from osquery_flags where name = 'extensions_socket';
++-----------------------------------+
+| value                             |
++-----------------------------------+
+| /Users/USERNAME/.osquery/shell.em |
++-----------------------------------+
+```
 
 But there are many other options to automatically [register extensions](https://osquery.readthedocs.io/en/stable/deployment/extensions/).
 
@@ -38,6 +48,6 @@ SELECT * FROM kubernetes_containers;
 SELECT * 
  FROM kubernetes_containers 
  JOIN kubernetes_pods 
- ON kubernetes_containers.pod_name=kubernetes_pods.name 
+ ON kubernetes_containers.pod_uid=kubernetes_pods.uid
  WHERE privileged="True";
 ```
