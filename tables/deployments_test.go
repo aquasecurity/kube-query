@@ -11,13 +11,19 @@ import (
 func TestNewDeploymentsTable(t *testing.T) {
 	tc := testclient.NewSimpleClientset()
 	dt := NewDeploymentsTable(tc)
+
+	expectedColumns := []table.ColumnDefinition{
+		table.TextColumn("name"),
+		table.TextColumn("namespace"),
+		table.TextColumn("selector"),
+	}
+
 	assert.Equal(t, &DeploymentsTable{
-		name: "kubernetes_deployments",
-		columns: []table.ColumnDefinition{
-			table.TextColumn("name"),
-			table.TextColumn("namespace"),
-			table.TextColumn("selector"),
-		},
-		client: tc,
+		name:    "kubernetes_deployments",
+		columns: expectedColumns,
+		client:  tc,
 	}, dt)
+
+	assert.Equal(t, "kubernetes_deployments", dt.Name())
+	assert.Equal(t, expectedColumns, dt.Columns())
 }
