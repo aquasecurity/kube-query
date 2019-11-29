@@ -4,8 +4,8 @@ import (
 	"context"
 	"log"
 
-	"github.com/kolide/osquery-go/plugin/table"
 	"github.com/aquasecurity/kube-query/utils"
+	"github.com/kolide/osquery-go/plugin/table"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 )
@@ -47,16 +47,16 @@ func (t *DeploymentsTable) Columns() []table.ColumnDefinition {
 func (t *DeploymentsTable) Generate(ctx context.Context, queryContext table.QueryContext) ([]map[string]string, error) {
 	depls, err := t.client.ExtensionsV1beta1().Deployments("").List(metav1.ListOptions{})
 	if err != nil {
-		log.Fatalf("Could not get deployments from Api")
+		log.Println("could not get deployments from k8s api")
 		return nil, err
 	}
 	rows := make([]map[string]string, len(depls.Items))
 	for i, depl := range depls.Items {
 		rows[i] = map[string]string{
-			"name":            depl.Name,
-			"namespace":       depl.Namespace,
+			"name":      depl.Name,
+			"namespace": depl.Namespace,
 			// TODO: check whether Selector is always using LabelSelector
-			"selector":        utils.Map2Str(depl.Spec.Selector.MatchLabels),
+			"selector": utils.Map2Str(depl.Spec.Selector.MatchLabels),
 		}
 	}
 	return rows, nil
