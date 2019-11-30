@@ -55,7 +55,7 @@ func (t *NodesTable) Columns() []table.ColumnDefinition {
 func (t *NodesTable) Generate(ctx context.Context, queryContext table.QueryContext) ([]map[string]string, error) {
 	nodes, err := t.client.CoreV1().Nodes().List(metav1.ListOptions{})
 	if err != nil {
-		log.Fatalf("Could not get nodes from Api")
+		log.Println("could not list nodes from k8s api")
 		return nil, err
 	}
 
@@ -84,14 +84,14 @@ func (t *NodesTable) Generate(ctx context.Context, queryContext table.QueryConte
 
 		// if nodename exists, we extract metrics using the name
 		if nodename := currRow["name"]; nodename != "" {
-			metrics, err := t.metricsClient.MetricsV1beta1().NodeMetricses().Get(nodename, metav1.GetOptions{})
+			nodemetric, err := t.metricsClient.MetricsV1beta1().NodeMetricses().Get(nodename, metav1.GetOptions{})
 			if err == nil {
-				// metrics.Usage is of type *resource.Quantity. from:
+				// nodemetric.Usage is of type *resource.Quantity. from:
 				// https://github.com/kubernetes/apimachinery/blob/master/pkg/api/resource/quantity.go
-				if cpu, ok := metrics.Usage[corev1.ResourceCPU]; ok {
+				if cpu, ok := nodemetric.Usage[corev1.ResourceCPU]; ok {
 					currRow["cpu_usage"] = cpu.String()
 				}
-				if memory, ok := metrics.Usage[corev1.ResourceMemory]; ok {
+				if memory, ok := nodemetric.Usage[corev1.ResourceMemory]; ok {
 					currRow["memory_usage"] = memory.String()
 				}
 			}
