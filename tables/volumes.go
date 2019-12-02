@@ -76,7 +76,7 @@ func (t *VolumesTable) getPathAndTypeFromVolume(volume *corev1.VolumeSource) (st
 	// json name representation of the only non zero type in the struct
 	if bytes, err := json.Marshal(*volume); err == nil {
 		output := make(map[string]map[string]interface{})
-		json.Unmarshal(bytes, &output)
+		_ = json.Unmarshal(bytes, &output)
 		for k, v := range output {
 			typ = k
 			strRepr, _ := json.Marshal(v)
@@ -89,7 +89,7 @@ func (t *VolumesTable) getPathAndTypeFromVolume(volume *corev1.VolumeSource) (st
 func (t *VolumesTable) getVolumesFromAllPods() []*VolumeRow {
 	pods, err := t.client.CoreV1().Pods("").List(metav1.ListOptions{})
 	if err != nil {
-		log.Fatalf("Could not get pods from Api")
+		log.Println("could not get pods from k8s api")
 		return nil
 	}
 	volumes := make([]*VolumeRow, 0)
