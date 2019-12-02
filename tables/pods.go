@@ -50,13 +50,13 @@ func (t *PodsTable) Columns() []table.ColumnDefinition {
 func (t *PodsTable) Generate(ctx context.Context, queryContext table.QueryContext) ([]map[string]string, error) {
 	pods, err := t.client.CoreV1().Pods("").List(metav1.ListOptions{})
 	if err != nil {
-		log.Fatalf("Could not get pods from Api")
+		log.Println("could not get pods from k8s api")
 		return nil, err
 	}
 	rows := make([]map[string]string, len(pods.Items))
 	for i, pod := range pods.Items {
 		rows[i] = map[string]string{
-			"uid":			   string(pod.UID), // UID is an alias to string
+			"uid":             string(pod.UID), // UID is an alias to string
 			"name":            pod.Name,
 			"namespace":       pod.Namespace,
 			"ip":              pod.Status.PodIP,
