@@ -41,7 +41,7 @@ Examples Queries
 # query all kube-system pods
 SELECT * FROM kubernetes_pods WHERE namespace="kube-system";
 
-# query all containers created by kuberentes
+# query all containers created by kubernetes
 SELECT * FROM kubernetes_containers;
 
 # query all pods that runs with a privileged container   
