@@ -94,14 +94,14 @@ func (t *VolumesTable) getVolumesFromAllPods() []*VolumeRow {
 	}
 	volumes := make([]*VolumeRow, 0)
 	for _, pod := range pods.Items {
-		currentVolume := &VolumeRow{}
 		if pod.Spec.Volumes != nil {
 			for _, volume := range pod.Spec.Volumes {
-				currentVolume.volume = &volume
-				currentVolume.fromPod = pod.Name
+				volumes = append(volumes, &VolumeRow{
+					volume:  volume.DeepCopy(),
+					fromPod: pod.Name,
+				})
 			}
 		}
-		volumes = append(volumes, currentVolume)
 	}
 	return volumes
 }
