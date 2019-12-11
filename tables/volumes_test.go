@@ -56,15 +56,15 @@ func TestVolumesTable_Generate(t *testing.T) {
 						},
 					},
 				},
-				//{	// This is not supported as desired: https://github.com/aquasecurity/kube-query/issues/10
-				//	Name: "volume-2",
-				//	VolumeSource: v1.VolumeSource{
-				//		HostPath: &v1.HostPathVolumeSource{
-				//			Path: "/foo2/bar/baz",
-				//			Type: nil,
-				//		},
-				//	},
-				//},
+				{
+					Name: "volume-2",
+					VolumeSource: v1.VolumeSource{
+						HostPath: &v1.HostPathVolumeSource{
+							Path: "/foo2/bar/baz",
+							Type: nil,
+						},
+					},
+				},
 			},
 		},
 		Status: v1.PodStatus{},
@@ -77,9 +77,9 @@ func TestVolumesTable_Generate(t *testing.T) {
 		{
 			"from_pod": "foo-pod-with-two-volumes", "name": "volume-1", "source": `{"path":"/foo1/bar/baz"}`, "type": "hostPath",
 		},
-		//{
-		//	"from_pod": "foo-pod-with-two-volumes", "name": "volume-2", "source": `{"path":"/foo2/bar/baz"}`, "type": "hostPath",
-		//},
+		{
+			"from_pod": "foo-pod-with-two-volumes", "name": "volume-2", "source": `{"path":"/foo2/bar/baz"}`, "type": "hostPath",
+		},
 	}, genTable)
 
 	t.Run("sad path, list pod returns an error", func(t *testing.T) {
