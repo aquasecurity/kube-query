@@ -1,6 +1,6 @@
 # kube-query
 
-kube-query is an extension for osquery. letting you visualize your cluster using sql queries.
+kube-query is an extension for [osquery](https://osquery.io), letting you visualize your cluster using sql queries.
 
 Deployment
 ===
@@ -14,13 +14,13 @@ $ go build kube-query.go
 ```
 
 ## Running kube-query
-**When running the kube-query, you should always pass the `-kubeconfig` flag, specifying the path to your kubeconfig file.**
+**When running kube-query, you should always pass the `-kubeconfig` flag, specifying the path to your kubeconfig file.**
 
 ## osqueryi 
-when using the [osqueryi tool](https://osquery.readthedocs.io/en/stable/introduction/using-osqueryi/) you can easily register kube-query by passing the -socket parameter to kube-query on another process. for example:  
+When using the [osqueryi tool](https://osquery.readthedocs.io/en/stable/introduction/using-osqueryi/) you can easily register kube-query by passing the -socket parameter to kube-query on another process. For example:  
 `./kube-query -socket="/path/to/osquery/socket" -kubeconfig="/path/to/kubeconfig.yml"` 
 
-In order to get the path to the osquery socket you could do something like:
+One way to get the path to the osquery socket is like this:
 ```
 osqueryi --nodisable_extensions
 osquery> select value from osquery_flags where name = 'extensions_socket';
@@ -31,11 +31,11 @@ osquery> select value from osquery_flags where name = 'extensions_socket';
 +-----------------------------------+
 ```
 
-But there are many other options to automatically [register extensions](https://osquery.readthedocs.io/en/stable/deployment/extensions/).
+There are many other options to automatically [register extensions](https://osquery.readthedocs.io/en/stable/deployment/extensions/).
 
 ###
 
-Examples Queries
+Example Queries
 ===
 ```sql
 # query all kube-system pods
