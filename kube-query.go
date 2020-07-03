@@ -16,8 +16,10 @@ func main() {
 	socketPath := flag.String("socket", "", "absolute path to the osquery socket")
 	
 	// currently we do not care for these flags, but they must be set for the auto loader of osquery
+	// the verbose flag is optionally given.
 	flag.String("timeout", "", "flag for specifying wait time before registering on autoload") 
 	flag.String("interval", "", "flag for specifying wait time before registering on autoload")
+	flag.String("verbose", "", "show more verbose messages (not yet implemented)")
 	
 	flag.Parse()
 	if len(*kubeconfig) == 0 {
