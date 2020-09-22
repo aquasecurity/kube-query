@@ -10,6 +10,14 @@ import (
 	osqueryTable "github.com/kolide/osquery-go/plugin/table"
 )
 
+// InClusterPossible returns true if loading an inside-kubernetes-cluster is possible.
+func InClusterPossible() bool {
+	fi, err := os.Stat("/var/run/secrets/kubernetes.io/serviceaccount/token")
+	return os.Getenv("KUBERNETES_SERVICE_HOST") != "" &&
+		os.Getenv("KUBERNETES_SERVICE_PORT") != "" &&
+		err == nil && !fi.IsDir()
+}
+
 func main() {
 	// Parsing flags
 	kubeconfig := flag.String("kubeconfig", "", "absolute path to the kubeconfig file (can be set by KUBECONFIG environment variable)")
@@ -23,11 +31,16 @@ func main() {
 	
 	flag.Parse()
 	if len(*kubeconfig) == 0 {
-		// if not specified from flag, try getting from env variable
-		if *kubeconfig = os.Getenv("KUBECONFIG"); len(*kubeconfig) == 0 {
-			log.Fatal("Kubeconfig was not specified. set KUBECONFIG environment variable or pass the --kubeconfig flag")
-			os.Exit(1)
-		}
+
+        // dont require kubeconfig if "inside cluster" config is possible
+        if InClusterPossible()  == false {
+            log.Fatal("InCluster config is not possible...")
+            // if not specified from flag, try getting from env variable
+		    if *kubeconfig = os.Getenv("KUBECONFIG"); len(*kubeconfig) == 0 {
+			    log.Fatal("Kubeconfig was not specified. set KUBECONFIG environment variable or pass the --kubeconfig flag")
+		  	    os.Exit(1)
+            }
+        }
 	}
 	if len(*socketPath) == 0 {
 		log.Fatal("Socket was not specified, set the --socket flag")		
