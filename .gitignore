@@ -5,3 +5,5 @@ conf*
 .vscode
 .gitignore
 *.exe*
+
+coverage.txt

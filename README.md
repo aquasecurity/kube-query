@@ -1,5 +1,23 @@
 # kube-query
 
+[![GitHub Release][release-img]][release]
+![Downloads][download]
+[![Go Report Card][report-card-img]][report-card]
+![Go Doc][go-doc]
+![Code Coverage][code-cov]
+[![License][license-img]][license]
+
+[download]: https://img.shields.io/github/downloads/aquasecurity/kube-query/total?logo=github
+[release-img]: https://img.shields.io/github/release/aquasecurity/kube-query.svg?logo=github
+[release]: https://github.com/aquasecurity/kube-query/releases
+[docker-pull]: https://img.shields.io/docker/pulls/krol/go_api?logo=docker&label=docker%20pulls%20%2F%20go_api
+[report-card-img]: https://goreportcard.com/badge/github.com/aquasecurity/kube-query
+[report-card]: https://goreportcard.com/report/github.com/aquasecurity/kube-query
+[go-doc]: https://godoc.org/github.com/aquasecurity/kube-query?status.svg
+[code-cov]: https://codecov.io/gh/aquasecurity/kube-query/branch/main/graph/badge.svg
+[license-img]: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+[license]: https://github.com/aquasecurity/kube-query/blob/main/LICENSE
+
 kube-query is an extension for [osquery](https://osquery.io), letting you visualize your cluster using sql queries.
 
 Deployment
